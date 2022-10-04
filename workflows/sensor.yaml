@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: dnull-systems-push
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+  - eventSourceName: github
+    name: github
+    eventName: github
+    filters:
+      data:
+      - path: headers.X-Github-Event
+        type: string
+        value:
+        - push
+      - path: body.ref
+        type: string
+        value:
+        - refs/heads/main
+        # - refs/heads/dev
+  triggers:
+  - template:
+      name: submit-workflow
+      argoWorkflow:
+        group: argoproj.io
+        version: v1alpha1
+        resource: Workflow
+        operation: submit
+        metadata:
+          generateName: sensor-dnull-systems-push-
+        source:
+          resource:
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: ci-
+            spec:
+              serviceAccountName: operate-workflow-sa
+              workflowTemplateRef:
+                name: ci
+              entrypoint: main
+              imagePullSecrets:
+              - name: docker-registry-secret
+              arguments:
+                parameters:
+                - name: message
+                  value: ''
+                - name: repo
+                  value: ''
+                - name: revision
+                  value: main # TODO
+                - name: image
+                  value: ''
+                - name: tag
+                  value: main # TODO
+                - name: dockerfile
+                  value: Dockerfile
+                - name: topic
+                  value: dnull
+                - name: yaml_path
+                  value: .global.tag
+                - name: file
+                  value: deploy.yaml
+        parameters:
+        - src:
+            dependencyName: github
+            dataKey: body.repository.full_name
+          dest: spec.arguments.parameters.0.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.ssh_url
+          dest: spec.arguments.parameters.1.value
+        # - src:
+            # dependencyName: github
+            # dataKey: body.ref
+          # dest: spec.arguments.parameters.2.value
+        - src:
+            dependencyName: github
+            dataTemplate: docker.dnull.systems/{{ .Input.body.repository.name }}
+          dest: spec.arguments.parameters.3.value
+        # - src:
+            # dependencyName: github
+            # dataTemplate: "{{=sprig.trimPrefix(\"refs/heads\", .Input.body.ref)}}"
+          # dest: spec.arguments.parameters.4.value
