@@ -63,6 +63,8 @@ spec:
                   value: .global.tag
                 - name: file
                   value: deploy.yaml
+                - name: extra_args
+                  values: "--build-arg=CONFIG=config.toml"
         parameters:
         - src:
             dependencyName: github
