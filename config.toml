@@ -1,4 +1,4 @@
-baseurl = "http://localhost:8080"
+baseurl = "https://shellshock1953.github.io/dnull.systems"
 languageCode = "en-us"
 theme = "terminal"
 paginate = 5
