@@ -195,6 +195,7 @@ let playing = false, skip = false;
 // ---- intro: type each command, then print its output line by line ----
 async function play() {
   playing = true; skip = false;
+  inp.value = typed.textContent = ''; inp.blur(); // drop input typed during replay
   $$('.h, .bg', term).forEach(e => e.remove());
   blocks().forEach(b => { b.hidden = !still; $$('.o', b).forEach(l => l.hidden = !still); });
   live.hidden = !still;
@@ -302,7 +303,7 @@ inp.onkeydown = e => {
   if (e.key !== 'Enter' || playing) return;
   const v = inp.value; inp.value = typed.textContent = ''; exec(v);
 };
-document.addEventListener('keydown', e => { if (playing) skip = true; else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) focus(); });
+document.addEventListener('keydown', e => { if (playing) { if (!['Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) skip = true; } else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) focus(); });
 document.addEventListener('click', e => {
   if (playing) skip = true;
   else if (!e.target.closest('a') && !getSelection().toString()) focus();
@@ -315,7 +316,7 @@ const add = x => { // append one line (or a cloned output) to the history, cappe
 };
 const show = id => { // reuse the static output instead of duplicating text
   const c = $(`[data-o=${id}]`).cloneNode(true);
-  c.removeAttribute('data-o'); c.hidden = false; $$('[hidden]', c).forEach(l => l.hidden = false); add(c);
+  c.removeAttribute('data-o'); c.hidden = false; $$('[style]', c).forEach(e => e.removeAttribute('style')); $$('[hidden]', c).forEach(l => l.hidden = false); add(c);
 };
 const FILES = { README: 'readme', '.contacts': 'contacts' };
 async function exec(line) {
@@ -335,6 +336,7 @@ async function exec(line) {
   else if (c === 'exit') {
     add('logout');
     if (still) return play();
+    playing = true; await sleep(300); // let any running glitch restore its text before we snapshot it
     const ns = textNodes(), orig = ns.map(n => n.data);
     for (let k = 1; k <= 6; k++) { // growing corruption, then a black beat, then the session restarts
       ns.forEach((n, i) => n.data = orig[i].replace(/\S/g, m => Math.random() < k / 6 ? rg() : m));
