@@ -29,7 +29,7 @@ a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 ::selection { background: #d0d0d0; color: #000; }
 .ps, .t { color: #fff; }
 .blk { margin-bottom: 1.45em; }
-pre.o { margin: 0; white-space: pre; overflow: hidden; }
+pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 /* 43 columns must fit the viewport */
 #bn { font-size: min(26px, calc((100vw - 32px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
 #dn { line-height: 1.2; }
@@ -76,7 +76,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; }
 <div class="out">
 <pre class="o" id="dn" data-a="dn" aria-hidden="true">+- ./donut --------------------------+
 |                                    |
-|            ########$              |
+|            ########$               |
 |          !=!!!!!!****###*          |
 |         :;====;=!!!!!!!!**         |
 |        ~~~~~~::::;;===!=!!!=       |
@@ -219,7 +219,7 @@ async function scramble(whole) {
   if (!n || n._g) return;
   const s = n.data, i = rnd(0, s.length - 1);
   let lo = i, hi = i + rnd(3, 9);
-  if (whole) { lo = s.lastIndexOf('\n', i) + 1; hi = s.indexOf('\n', i); if (hi < 0) hi = s.length; }
+  if (whole) { lo = s.lastIndexOf('\n', i) + 1; hi = s.indexOf('\n', i); if (hi < 0) hi = s.length; hi = Math.max(hi, lo); }
   n._g = 1;
   for (let k = rnd(1, 3); k--;) {
     n.data = s.slice(0, lo) + s.slice(lo, hi).replace(/\S/g, rg) + s.slice(hi);
@@ -244,7 +244,7 @@ async function flicker() {
 const fx = [() => scramble(0), () => scramble(1), tear, jitter, flicker];
 async function glitch() {
   await fx[rnd(0, fx.length - 1)]();
-  if (Math.random() < .3) { await sleep(rnd(80, 200)); await fx[rnd(0, fx.length - 1)](); }
+  if (Math.random() < .3) { await sleep(rnd(80, 200)); if (!playing) await fx[rnd(0, fx.length - 1)](); }
 }
 
 // ---- fake background activity above the prompt: one short line, removed after a few seconds ----
@@ -321,7 +321,7 @@ async function exec(line) {
   else if (c === 'exit') {
     add('logout');
     if (still) return play();
-    playing = true; await sleep(300); // let any running glitch restore its text before we snapshot it
+    playing = true; await sleep(800); // let any running glitch restore its text before we snapshot it
     const ns = textNodes(), orig = ns.map(n => n.data);
     for (let k = 1; k <= 6; k++) { // growing corruption, then a black beat, then the session restarts
       ns.forEach((n, i) => n.data = orig[i].replace(/\S/g, m => Math.random() < k / 6 ? rg() : m));
