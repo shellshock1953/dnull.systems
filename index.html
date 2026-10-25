@@ -17,21 +17,22 @@
 [hidden] { display: none !important; }
 html { background: #000; }
 body {
-  margin: 0; padding: 14px 12px 40px; background: #000; color: #d0d0d0;
-  font: clamp(11px, 3vw, 14px)/1.35 ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
+  margin: 0; padding: 18px 12px 48px; background: #000; color: #d0d0d0;
+  font: clamp(15px, 1.1vw + 10px, 22px)/1.45 ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
 }
-#term { max-width: 100ch; margin: 0 auto; overflow-x: clip; }
-.o, .cmd { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.35em; }
+#term { max-width: 80ch; margin: 0 auto; overflow-x: clip; }
+.o, .cmd { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.45em; }
 b { color: #fff; font-weight: bold; }
 .d, .bg { color: #707070; }
 a { color: inherit; text-decoration: underline; }
 a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 ::selection { background: #d0d0d0; color: #000; }
-.ps { color: #fff; }
-.t { color: #fff; }
-.blk { margin-bottom: 1.35em; }
-.ff { display: flex; flex-wrap: wrap; gap: 0 3ch; }
-.ff > span { display: block; white-space: pre-wrap; }
+.ps, .t { color: #fff; }
+.blk { margin-bottom: 1.45em; }
+pre.o { margin: 0; white-space: pre; overflow: hidden; }
+/* 34 columns must fit the viewport; cap at 34px on desktop */
+#bn { font-size: min(34px, calc((100vw - 24px) / 21)); line-height: 1; color: #fff; padding: .2em 0; }
+#dn { line-height: 1.2; }
 .cur {
   display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0;
   vertical-align: text-bottom; animation: bl 1.06s steps(1) infinite;
@@ -47,131 +48,63 @@ a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 <section class="blk">
 <div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">figlet dnull</span></div>
 <div class="out">
-<div class="o"><b>     _             _ _ 
-  __| |_ __  _   _| | |
- / _` | '_ \| | | | | |
-| (_| | | | | |_| | | |
- \__,_|_| |_|\__,_|_|_|</b></div>
+<pre class="o" id="bn" data-a="bn" role="img" aria-label="dnull">    ██               ████   ████  
+    ██ ████   ██  ██   ██     ██  
+██████ ██  ██ ██  ██   ██     ██  
+██  ██ ██  ██ ██  ██   ██     ██  
+██████ ██  ██ ██████   ████   ████</pre>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">fastfetch</span></div>
+<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">whoami</span></div>
 <div class="out">
-<div class="o ff"><span>    _.---._
-  .'     ,'.
- /      /   \
-|      /     |
- \    /     /
-  '._/___.-'
-</span><span><b>shellshock</b>@<b>dnull</b>
------------------
-<b>Name</b>:     Bohdan Sukhomlinov
-<b>Role</b>:     DevOps / Platform Engineer / SRE
-<b>Location</b>: Lviv, Ukraine
-<b>Uptime</b>:   11+ years in IT
-<b>Shell</b>:    zsh, zellij, neovim
-<b>Cloud</b>:    AWS (9+ y), Azure (4+ y)
-<b>K8s</b>:      Kubernetes (6+ y), ArgoCD, Helm
-<b>IaC</b>:      Terraform, Terragrunt, Ansible
-<b>CI</b>:       GitHub Actions, GitLab CI, Jenkins
-<b>Obs</b>:      Prometheus, Grafana, Loki</span></div>
+<div class="o"><b>devops / platform / sre</b> - lviv, ua - 11y uptime</div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">cat ~/README</span></div>
-<div class="out" data-o="readme">
-<div class="o">DevOps / Platform / SRE with 11+ years in IT, bare metal included: sysadmin -> DevOps -> SRE -> Platform.</div>
-<div class="o">Migrates legacy systems to Kubernetes with zero-downtime deploys and reactive autoscaling. Open source, teaching, and volunteering on Ukrainian government projects.</div>
-</div>
-</section>
-
-<section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">ls -lgo ~/projects</span></div>
+<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">ls ~/projects</span></div>
 <div class="out">
-<div class="o">total 32
-drwxr-xr-x 2 4096 Oct 24 09:12 open-procurement
-drwxr-xr-x 2 4096 Oct 22 18:40 logistics-platform
-drwxr-xr-x 2 4096 Oct 19 11:05 defense-support
-drwxr-xr-x 2 4096 Oct 11 23:51 kyiv-crisis-infra
-drwxr-xr-x 2 4096 Sep 30 14:27 sport-events-infra
-drwxr-xr-x 2 4096 Sep 17 08:03 data-analytics
-drwxr-xr-x 2 4096 Oct 25 06:30 homelab
-drwxr-xr-x 2 4096 Aug 29 16:48 appelsin</div>
+<div class="o">open-procurement  logistics-platform  defense-support  kyiv-crisis-infra  homelab  appelsin</div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">cd ~/projects &amp;&amp; tail -n1 */about</span></div>
+<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">./donut</span></div>
 <div class="out">
-<div class="o d">==&gt; open-procurement/about &lt;==</div>
-<div class="o">Public e-procurement platform for municipalities, millions of transactions. A model for gov digitalization.</div>
-<div class="o"></div>
-<div class="o d">==&gt; logistics-platform/about &lt;==</div>
-<div class="o">Global cargo-protection platform. Zero-downtime AWS to Azure migration.</div>
-<div class="o"></div>
-<div class="o d">==&gt; defense-support/about &lt;==</div>
-<div class="o">Secure, scalable AWS/ECS infrastructure for defense operations. Volunteer.</div>
-<div class="o"></div>
-<div class="o d">==&gt; kyiv-crisis-infra/about &lt;==</div>
-<div class="o">HA bare-metal Kubernetes (Talos) for Kyiv City crisis management.</div>
-<div class="o"></div>
-<div class="o d">==&gt; sport-events-infra/about &lt;==</div>
-<div class="o">Split a monolithic AWS account into many, strict IAM, better CI/CD. Freelance.</div>
-<div class="o"></div>
-<div class="o d">==&gt; data-analytics/about &lt;==</div>
-<div class="o">Analytics monolith from docker-compose to EKS with CI/CD and autoscaling. Freelance.</div>
-<div class="o"></div>
-<div class="o d">==&gt; homelab/about &lt;==</div>
-<div class="o">Self-hosted Kubernetes, Ceph/GlusterFS and GitOps on Proxmox and Mikrotik. Personal.</div>
-<div class="o"></div>
-<div class="o d">==&gt; appelsin/about &lt;==</div>
-<div class="o">Student mentorship: practical DevOps and GitOps on Kubernetes.</div>
-</div>
-</section>
-
-<section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">ls -1 ~/oss ~/talks</span></div>
-<div class="out">
-<div class="o">/home/shellshock/oss:
-<a href="https://galaxy.ansible.com/ui/standalone/roles/shellshock1953/components/">ansible-role-components</a>
-<a href="https://github.com/dnullproject/mono-to-actualbudget">mono-to-actualbudget</a>
-<a href="https://github.com/dnullproject/haltoping">haltoping</a>
-<a href="https://github.com/orgs/softserve-appelsin/repositories">softserve-appelsin</a>
-
-/home/shellshock/talks:
-<a href="https://www.youtube.com/watch?v=GoF3RDdAK3Q">argo-cd-gitops-essentials</a>
-<a href="https://www.youtube.com/watch?v=HgTeB1OwcNU">argo-rollouts-advanced-deployments</a>
-<a href="https://youtu.be/EYrxhvwoXBo?si=UPfNExAcY5B6TVib">argo-workflows-k8s-native</a></div>
-</div>
-</section>
-
-<section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">git -C ~/career log --oneline</span></div>
-<div class="out">
-<div class="o"><span class="d">9d2e7b1</span> 2025-now  Freelance: DevOps/Platform/SRE
-<span class="d">c40a8e3</span> 2024-25   DigitalCares: Lead DevOps
-<span class="d">5be1f27</span> 2019-24   SoftServe: Senior DevOps/Platform
-<span class="d">0a7d3c9</span> 2017-19   Quintagroup: Middle DevOps
-<span class="d">e81b564</span> 2014-16   UARNet: System Administrator</div>
+<pre class="o" id="dn" data-a="dn" aria-hidden="true">+- ./donut --------------------------+
+|                                    |
+|            ########$              |
+|          !=!!!!!!****###*          |
+|         :;====;=!!!!!!!!**         |
+|        ~~~~~~::::;;===!=!!!=       |
+|        -.    .,,,-~~:;;;;===;      |
+|                   .,--~~:::;;      |
+|               .=*    ..,--~~:      |
+|             ..~=;:~     .,,-       |
+|                ~::~.               |
+|                                    |
+|                                    |
+|                                    |
+|                                    |
++------------------------------------+</pre>
 </div>
 </section>
 
 <section class="blk">
 <div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">cat ~/.contacts</span></div>
 <div class="out" data-o="contacts">
-<div class="o">github    <a href="https://github.com/shellshock1953">https://github.com/shellshock1953</a>
-linkedin  <a href="https://www.linkedin.com/in/shellshock-dnull/">https://www.linkedin.com/in/shellshock-dnull/</a>
+<div class="o">github    <a href="https://github.com/shellshock1953">shellshock1953</a>
+linkedin  <a href="https://www.linkedin.com/in/shellshock-dnull/">shellshock-dnull</a>
 email     <a href="mailto:shellshock.dnull@gmail.com">shellshock.dnull@gmail.com</a></div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">xdg-open https://cv.dnull.systems</span></div>
+<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">xdg-open cv.dnull.systems</span></div>
 <div class="out" data-o="cv">
-<div class="o">Opening in existing browser session.
--&gt; <a href="https://cv.dnull.systems">full CV</a> (https://cv.dnull.systems)</div>
+<div class="o">-&gt; <a href="https://cv.dnull.systems">full cv</a></div>
 </div>
 </section>
 
@@ -192,11 +125,62 @@ const toBottom = () => scrollTo(0, 1e9);
 const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 40;
 let playing = false, skip = false;
 
+// ---- animated ASCII: one rAF loop (<=20 fps) drives each <pre data-a> only while it is on screen ----
+const GB = '░▒▓#%&@$01/\\|';
+const grid = $('#bn').textContent.split('\n');
+const W = grid[0].length;
+// <donut>
+const donut = (A, B, w, h) => {
+  const o = Array(w * h).fill(' '), z = Array(w * h).fill(0);
+  const cA = Math.cos(A), sA = Math.sin(A), cB = Math.cos(B), sB = Math.sin(B);
+  for (let th = 0; th < 6.28; th += .07) {
+    const ct = Math.cos(th), st = Math.sin(th);
+    for (let ph = 0; ph < 6.28; ph += .03) {
+      const cp = Math.cos(ph), sp = Math.sin(ph), cx = ct + 2, D = 1 / (sp * cx * sA + st * cA + 5), t = sp * cx * cA - st * sA;
+      const x = (w / 2 + w * .42 * D * (cp * cx * cB - t * sB)) | 0, y = (h / 2 + h * .55 * D * (cp * cx * sB + t * cB)) | 0, i = x + w * y;
+      const L = (st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB;
+      if (y >= 0 && y < h && x >= 0 && x < w && D > z[i]) { z[i] = D; o[i] = ' .,-~:;=!*#$@'[L > 0 ? (L * 8) | 0 : 0]; }
+    }
+  }
+  const row = y => o.slice(y * w, y * w + w).join(''), bar = '-'.repeat(w - 9);
+  return [`+- ./donut ${bar.slice(0, -1)}+`.slice(0, w + 2), ...Array.from({ length: h }, (_, y) => '|' + row(y) + '|'), '+' + '-'.repeat(w) + '+'].join('\n');
+};
+// </donut>
+const AN = {
+  bn(t, o) { // decode / slice tear at random, a column scanline sweeps all the time
+    if (t > (o.next ??= 0)) {
+      o.ev = o.next ? { k: rnd(0, 2) ? 'd' : 't', s: t, r: rnd(0, 3), dx: rnd(1, 3) * (rnd(0, 1) || -1) } : { k: 'd', s: t };
+      o.next = t + rnd(6000, 13000);
+    }
+    const e = o.ev, p = e ? (t - e.s) / (e.k === 'd' ? 900 : 130) : 2, sx = ((t / 80) % (W + 12) | 0) - 6;
+    return grid.map((r, y) => {
+      let s = [...r].map((c, x) => c === ' ' ? c : p < 1 && e.k === 'd' && x > p * (W + 6) ? GB[rnd(0, GB.length - 1)] : c === '█' && x >= sx && x < sx + 3 ? '▓▒░'[x - sx] : c).join('');
+      if (p < 1 && e.k === 't' && y >= e.r && y < e.r + 2) s = e.dx > 0 ? ' '.repeat(e.dx) + s.slice(0, -e.dx) : s.slice(-e.dx) + ' '.repeat(-e.dx);
+      return s;
+    }).join('\n');
+  },
+  dn: t => donut(t / 700, t / 1400, 36, 14),
+};
+const pieces = $$('[data-a]').map(el => ({ el, f: AN[el.dataset.a], on: false, last: '' }));
+let tick = 0;
+function loop(t) {
+  requestAnimationFrame(loop);
+  if (t - tick < 50 || document.hidden) return;
+  tick = t;
+  for (const p of pieces) if (p.on) { const s = p.f(t, p); if (s !== p.last) p.el.textContent = p.last = s; }
+}
+if (!still) {
+  const io = new IntersectionObserver(es => es.forEach(e => { const p = pieces.find(p => p.el === e.target); p.on = e.isIntersecting; }));
+  pieces.forEach(p => io.observe(p.el));
+  requestAnimationFrame(loop);
+}
+
 // ---- intro: type each command, then print its output line by line ----
 async function play() {
   playing = true; skip = false;
   inp.value = typed.textContent = ''; inp.blur(); // drop input typed during replay
   $$('.h, .bg', term).forEach(e => e.remove());
+  pieces.forEach(p => p.next = 0); // re-decode the banner on every (re)start
   blocks().forEach(b => { b.hidden = !still; $$('.o', b).forEach(l => l.hidden = !still); });
   live.hidden = !still;
   if (still) { playing = false; return; }
@@ -206,7 +190,7 @@ async function play() {
     t.after(cur);
     for (const ch of s) {
       if (skip) break;
-      t.textContent += ch; await sleep(rnd(4, 12));
+      t.textContent += ch; await sleep(rnd(15, 40));
     }
     t.textContent = s; cur.remove();
     if (!skip) await sleep(rnd(60, 150));
@@ -214,8 +198,7 @@ async function play() {
     for (const l of $$('.o', b)) {
       l.hidden = false; toBottom();
       if (skip) continue;
-      await sleep(rnd(5, 12));
-      if (Math.random() < .02) await sleep(rnd(250, 500)); // stutter
+      await sleep(rnd(40, 90));
     }
   }
   live.hidden = false; typed.after(cur); toBottom(); playing = false;
@@ -226,7 +209,7 @@ const GL = '░▒▓█▀▄▌▐#%&@$/\\|<>{}[]?*+=~^';
 const rg = () => GL[rnd(0, GL.length - 1)];
 const textNodes = () => {
   const w = document.createTreeWalker(term, NodeFilter.SHOW_TEXT, { acceptNode: n =>
-    /\S/.test(n.data) && !n.parentElement.closest('[hidden]') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    /\S/.test(n.data) && !n.parentElement.closest('[hidden], [data-a]') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
   const a = []; while (w.nextNode()) a.push(w.currentNode); return a;
 };
 // whole=true replaces a whole row with random glyphs, else a few characters
@@ -244,7 +227,7 @@ async function scramble(whole) {
   n.data = s; n._g = 0;
 }
 async function tear() { // shift a slice of rows sideways
-  const ls = $$('.o', term).filter(l => !l.closest('[hidden]')), i = rnd(0, ls.length - 1);
+  const ls = $$('.o:not([data-a])', term).filter(l => !l.closest('[hidden]')), i = rnd(0, ls.length - 1);
   const dx = rnd(4, 18) * (Math.random() < .5 ? -1 : 1), pick = ls.slice(i, i + rnd(1, 3));
   pick.forEach((l, k) => l.style.transform = `translateX(${k % 2 ? -dx / 2 : dx}px)`);
   await sleep(rnd(50, 120));
@@ -263,32 +246,34 @@ async function glitch() {
   if (Math.random() < .3) { await sleep(rnd(80, 200)); await fx[rnd(0, fx.length - 1)](); }
 }
 
-// ---- fake background activity above the prompt, removed after a few seconds ----
+// ---- fake background activity above the prompt: one short line, removed after a few seconds ----
 const t0 = Date.now(), up = () => (4821 + (Date.now() - t0) / 1000).toFixed(3).padStart(9);
 const hms = () => new Date().toTimeString().slice(0, 8);
-const dstr = () => new Date().toDateString();
-const load = () => [0, 0, 0].map(() => (Math.random() * .8).toFixed(2)).join(', ');
+let pct = 0;
+const pull = () => { // docker-pull style progress bar
+  pct = pct >= 100 ? 0 : Math.min(100, pct + rnd(4, 13));
+  const n = pct / 5 | 0;
+  return `[${('='.repeat(n) + (n < 20 ? '>' : '')).padEnd(20)}] ${String(pct).padStart(3)}% pull dnull/web`;
+};
+// [line, ms]: with ms the line is re-rendered every ms
 const life = [
   [() => `[${up()}] hrtimer: interrupt took ${rnd(2e6, 9e6)} ns`],
-  [() => `[${up()}] kworker/0:1 (${rnd(100, 9999)}) used greatest stack depth: ${rnd(10000, 13000)} bytes left`],
-  [() => `${dstr().slice(4, 10)} ${hms()} dnull CRON[${rnd(1000, 9999)}]: (root) CMD (/usr/local/bin/backup.sh)`],
-  [() => `Broadcast message from root@dnull (${dstr().slice(0, 10)} ${hms()} ${dstr().slice(11)}):`, () => '', () => `backup finished: ${rnd(20, 60)}G in ${rnd(200, 400)}s`],
+  [() => `${new Date().toDateString().slice(4, 10)} ${hms()} CRON[${rnd(1000, 9999)}]: (root) CMD (backup.sh)`],
   [() => 'Connection to 10.0.0.1 closed.'],
-  [() => `top - ${hms()} up 11 years,  1 user,  load average: ${load()}`, 1],  // trailing 1 = live-updating ticker
-  [() => `CPU[${'|'.repeat(rnd(2, 20)).padEnd(24)}${(rnd(20, 99) / 10).toFixed(1)}%]`, 1],
+  [() => `up 11 years, load average: ${[0, 0, 0].map(() => (Math.random() * .8).toFixed(2)).join(', ')}`, 700],
+  [() => `CPU[${'|'.repeat(rnd(2, 20)).padEnd(24)}${(rnd(20, 99) / 10).toFixed(1)}%]`, 700],
+  [pull, 180],
 ];
 async function bg() {
   if (feed.children.length) return;
-  const mk = [...life[rnd(0, life.length - 1)]], tick = mk[mk.length - 1] === 1;
-  if (tick) mk.pop();
-  const stick = atBottom();
-  const els = mk.map(f => { const d = document.createElement('div'); d.className = 'o bg'; d.textContent = f(); feed.append(d); return d; });
-  if (stick) toBottom();
-  for (let k = tick ? 5 : 1; k--;) {
-    await sleep(tick ? 700 : rnd(3500, 5000));
-    if (tick) els[0].textContent = mk[0]();
+  const [f, ms] = life[rnd(0, life.length - 1)], stick = atBottom();
+  const d = Object.assign(document.createElement('div'), { className: 'o bg', textContent: f() });
+  feed.append(d); if (stick) toBottom();
+  for (let k = ms ? Math.ceil(4000 / ms) : 1; k--;) {
+    await sleep(ms || rnd(3500, 5000));
+    if (ms) d.textContent = f();
   }
-  const s2 = atBottom(); els.forEach(e => e.remove()); if (s2) toBottom();
+  const s2 = atBottom(); d.remove(); if (s2) toBottom();
 }
 const every = (fn, lo, hi) => (async () => { for (;;) { await sleep(rnd(lo, hi)); if (!document.hidden && !playing) await fn(); } })();
 
@@ -318,19 +303,18 @@ const show = id => { // reuse the static output instead of duplicating text
   const c = $(`[data-o=${id}]`).cloneNode(true);
   c.removeAttribute('data-o'); c.hidden = false; $$('[style]', c).forEach(e => e.removeAttribute('style')); $$('[hidden]', c).forEach(l => l.hidden = false); add(c);
 };
-const FILES = { README: 'readme', '.contacts': 'contacts' };
 async function exec(line) {
   const [c, ...a] = line.trim().split(/\s+/);
   add(`${PS} ${line}`);
   if (!c) return;
   if (c === 'help') add('commands: help ls cat cv contact whoami clear exit');
   else if (c === 'whoami') add('shellshock');
-  else if (c === 'ls') add(a.includes('-a') ? '.  ..  .contacts  README  projects' : 'README  projects');
+  else if (c === 'ls') add(a.includes('-a') ? '.  ..  .contacts  projects' : 'projects');
   else if (c === 'cv') show('cv');
   else if (c === 'contact') show('contacts');
   else if (c === 'cat') a.forEach(f => {
     f = f.replace(/^~\//, '');
-    if (FILES[f]) show(FILES[f]); else add(`cat: ${f}: ${f === 'projects' ? 'Is a directory' : 'No such file or directory'}`);
+    if (f === '.contacts') show('contacts'); else add(`cat: ${f}: ${f === 'projects' ? 'Is a directory' : 'No such file or directory'}`);
   });
   else if (c === 'clear') { blocks().forEach(b => b.hidden = true); $$('.h', term).forEach(e => e.remove()); }
   else if (c === 'exit') {
