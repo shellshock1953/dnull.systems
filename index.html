@@ -30,8 +30,8 @@ a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 .ps, .t { color: #fff; }
 .blk { margin-bottom: 1.45em; }
 pre.o { margin: 0; white-space: pre; overflow: hidden; }
-/* 34 columns must fit the viewport; cap at 34px on desktop */
-#bn { font-size: min(34px, calc((100vw - 24px) / 21)); line-height: 1; color: #fff; padding: .2em 0; }
+/* 43 columns must fit the viewport */
+#bn { font-size: min(26px, calc((100vw - 32px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
 #dn { line-height: 1.2; }
 .cur {
   display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0;
@@ -48,11 +48,12 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; }
 <section class="blk">
 <div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">figlet dnull</span></div>
 <div class="out">
-<pre class="o" id="bn" data-a="bn" role="img" aria-label="dnull">    ██               ████   ████  
-    ██ ████   ██  ██   ██     ██  
-██████ ██  ██ ██  ██   ██     ██  
-██  ██ ██  ██ ██  ██   ██     ██  
-██████ ██  ██ ██████   ████   ████</pre>
+<pre class="o" id="bn" data-a="bn" role="img" aria-label="dnull">██████╗ ███╗   ██╗██╗   ██╗██╗     ██╗     
+██╔══██╗████╗  ██║██║   ██║██║     ██║     
+██║  ██║██╔██╗ ██║██║   ██║██║     ██║     
+██║  ██║██║╚██╗██║██║   ██║██║     ██║     
+██████╔╝██║ ╚████║╚██████╔╝███████╗███████╗
+╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚══════╝</pre>
 </div>
 </section>
 
