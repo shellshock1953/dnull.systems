@@ -428,7 +428,10 @@ async function exec(line) {
   if (!c) return;
   let code = 0;
   const err = (m, n = 1) => { add(m); code = n; };
-  if (c === 'help') add('commands: help ls ll cat bat cv contact whoami kk k gst v ssh z clear exit');
+  if (c === 'sudo') err('shellshock is not in the sudoers file. This incident will be reported.');
+  else if (c === 'rm' && a.includes('/')) err("rm: it is dangerous to operate recursively on '/' (nice try)");
+  else if (c === 'hack') { for (const l of ['[*] scanning dnull.systems ...', '[+] found: 1 human, 0 vulnerabilities', '[-] access denied. hire him instead: shellshock.dnull@gmail.com']) { add(l); await sleep(400); } }
+  else if (c === 'help') add('commands: help ls ll cat bat cv contact whoami kk k gst v ssh z clear exit');
   else if (c === 'whoami') add('shellshock');
   else if (/^(ls|ll|la|eza)$/.test(c)) {
     const p = a.find(x => x[0] !== '-');
@@ -465,6 +468,15 @@ async function exec(line) {
   st.textContent = code ? `✖ ${code} ` : ''; // starship $status on the next prompt
 }
 
+// easter egg for whoever opens devtools; clear first so extension noise doesn't bury it
+const egg = () => {
+  console.clear();
+  const m = 'font-family:monospace;color:#d0d0d0;background:#000;padding:2px 6px', b = m + ';color:#fff;font-weight:bold';
+  console.log('%c░▒▓ dnull.systems ▓▒░', b + ';font-size:16px');
+  console.log("%cyou opened devtools. you're one of us.\nthe prompt hides a few commands: sudo, hack, rm -rf /\nor type dnull() right here.", m);
+};
+window.dnull = () => (console.log('%cgithub    https://github.com/shellshock1953\nlinkedin  https://www.linkedin.com/in/shellshock-dnull/\nemail     shellshock.dnull@gmail.com\ncv        https://cv.dnull.systems', 'font-family:monospace;color:#d0d0d0'), 'ping me ;)');
+addEventListener('load', () => setTimeout(egg, 1500));
 play(); every(glitch, 1500, 3800); every(bg, 12000, 25000); every(scan, 20000, 40000); every(vjit, 20000, 40000);
 })();
 </script>
