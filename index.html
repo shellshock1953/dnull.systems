@@ -21,7 +21,7 @@ body {
   font: clamp(15px, 1.1vw + 10px, 22px)/1.45 "Iosevka Term", "Iosevka Nerd Font", "Iosevka", ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
 }
 /* zellij: tab bar + status bar, one rounded pane */
-#tb, #sb { position: fixed; left: 0; right: 0; height: 24px; line-height: 24px; display: flex; overflow: hidden; white-space: pre; background: #1a1a1a; color: #a0a0a0; font-size: 14px; z-index: 5; }
+#tb, #sb { position: fixed; left: 0; right: 0; height: 24px; line-height: 24px; display: flex; overflow: hidden; white-space: pre; background: #1a1a1a; color: #a0a0a0; font-size: 13px; z-index: 5; }
 #tb { top: 0; } #sb { bottom: 0; }
 #tb span, #sb span { margin-right: 1px; }
 #tb .z { background: #3a3a3a; color: #fff; font-weight: bold; }
@@ -30,7 +30,7 @@ body {
 #sb .m { background: #505050; color: #fff; font-weight: bold; }
 #sb kbd { font: inherit; background: #3a3a3a; color: #fff; }
 #term { position: relative; border: 1px solid #505050; border-radius: 8px; padding: 1em 1.3ch .6em; overflow-x: clip; }
-#term::before { content: " zsh "; position: absolute; top: -.75em; left: 1.5ch; background: #000; color: #d0d0d0; font-size: .8em; line-height: 1.5; }
+#term::before { content: " " attr(data-z) " "; position: absolute; top: -.75em; left: 1.5ch; background: #000; color: #d0d0d0; font-size: .8em; line-height: 1.5; }
 .o, .cmd { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.45em; }
 b { color: #fff; font-weight: bold; }
 .d, .bg { color: #707070; }
@@ -41,7 +41,13 @@ a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 .blk { margin-bottom: 1.45em; }
 pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 /* 43 columns must fit the viewport */
-#bn { font-size: min(26px, calc((100vw - 44px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
+#bn { font-size: min(20px, calc((100vw - 44px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
+/* decorative glitch overlays: never selectable, never clickable */
+#term::after { content: ""; display: none; position: absolute; left: var(--l); top: var(--t); width: var(--w); height: 1px; background: #000; box-shadow: var(--sh); pointer-events: none; }
+#term.br::after { display: block; }
+#sb kbd.iv { background: #d0d0d0; color: #000; }
+#mk { position: absolute; bottom: 0; height: 2px; background: #707070; transition: left .12s, width .12s; }
+#tb, #sb, .pl, .bt > i { user-select: none; -webkit-user-select: none; }
 /* starship: powerline ribbon, triangles by clip-path (no Nerd Font glyphs) */
 .pl { display: flex; white-space: nowrap; line-height: 1.45; }
 .pl i { font-style: normal; position: relative; padding: 0 1ch 0 1.4ch; }
@@ -80,6 +86,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
   .k9 .nw, .k9 col:nth-child(1), .k9 col:nth-child(5), .k9 col:nth-child(7) { display: none; }
   .k9 col:nth-child(4) { width: 12ch; }
 }
+@media (min-width: 521px) { body { font-size: clamp(15px, .15vw + 13px, 16px); } }
 @media (max-width: 520px) {
   .pl .s3, .pl .s4 { display: none; }
   .bt { font-size: .9em; }
@@ -91,7 +98,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 </head>
 <body>
 <header id="tb" aria-hidden="true"><span class="z"> Zellij (dnull) </span><span> 1 editor </span><span class="on"> 2 shell </span><span> 3 k9s </span><span> 4 etc </span></header>
-<main id="term">
+<main id="term" data-z="zsh">
 
 <section class="blk">
 <div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">figlet dnull</span></div></div>
@@ -146,7 +153,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 <div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">bat ~/.contacts</span></div></div>
 <div class="out" data-o="contacts">
 <div class="o bt"><i class="g">───────</i><i>┬</i><i class="ln">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</i></div>
-<div class="o bt"><i class="g"></i><i>│</i><span class="bd">File: <b>.contacts</b></span></div>
+<div class="o bt"><i class="g"></i><i>│</i><span class="bd" data-gl>File: <b data-gl>.contacts</b></span></div>
 <div class="o bt"><i class="g">───────</i><i>┼</i><i class="ln">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</i></div>
 <div class="o bt"><i class="g">1</i><i>│</i><span class="bd">github    <a href="https://github.com/shellshock1953">shellshock1953</a></span></div>
 <div class="o bt"><i class="g">2</i><i>│</i><span class="bd">linkedin  <a href="https://www.linkedin.com/in/shellshock-dnull/">shellshock-dnull</a></span></div>
@@ -173,7 +180,6 @@ const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [..
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const pick = a => a[rnd(0, a.length - 1)];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const term = $('#term'), live = $('#live'), typed = $('#typed'), feed = $('#feed'), cur = $('.cur'), st = $('#st');
 const blocks = () => $$('.blk');
 const toBottom = () => scrollTo(0, 1e9);
@@ -190,7 +196,7 @@ const AN = {
   bn(t, o) { // decode / slice tear at random, a column scanline sweeps all the time
     if (t > (o.next ??= 0)) {
       o.ev = o.next ? { k: rnd(0, 2) ? 'd' : 't', s: t, r: rnd(0, 3), dx: rnd(1, 3) * (rnd(0, 1) || -1) } : { k: 'd', s: t };
-      o.next = t + rnd(6000, 13000);
+      o.next = t + rnd(3500, 8000);
     }
     const e = o.ev, p = e ? (t - e.s) / (e.k === 'd' ? 900 : 130) : 2, sx = ((t / 80) % (W + 12) | 0) - 6;
     return grid.map((r, y) => {
@@ -209,39 +215,42 @@ function loop(t) {
   for (const p of pieces) if (p.on) { const s = p.f(t, p); if (s !== p.last) p.el.textContent = p.last = s; }
 }
 
-// ---- k9s panel: numbers drift, selection browses, a pod now and then restarts ----
+// ---- k9s panel: all state lives in K, the DOM is only ever written, never read back ----
 const k9 = $('#k9'), rows = $$('tbody tr', k9);
-const age = rows.map(r => +r.dataset.s), cell = (r, i, v) => r.cells[i].textContent = v;
+const K = rows.map(r => { const c = [...r.cells].map(x => x.textContent); return { ns: c[0], n: c[1], rd: c[2], s: c[3], rs: +c[4], cpu: +c[5], mem: +c[6], age: +r.dataset.s, x: 0 }; });
 const fmt = s => s < 120 ? s + 's' : s < 7200 ? (s / 60 | 0) + 'm' : s < 172800 ? (s / 3600 | 0) + 'h' : (s / 86400 | 0) + 'd';
-let sel = 0, dir = 1, pause = 0, busy = false;
-async function churn(i) { // Terminating -> ContainerCreating -> Running with a new suffix
-  const r = rows[i]; busy = true; r.classList.add('x'); cell(r, 3, 'Terminating'); await sleep(2200);
-  cell(r, 1, r.cells[1].textContent.replace(/-[^-]+$/, '-' + sfx())); cell(r, 2, '0/1'); cell(r, 3, 'ContainerCreating'); cell(r, 5, 0); cell(r, 6, 0); age[i] = 0;
-  await sleep(2600); cell(r, 2, '1/1'); cell(r, 3, 'Running'); cell(r, 4, +r.cells[4].textContent + 1); r.classList.remove('x'); busy = false;
+const draw = () => rows.forEach((r, i) => {
+  const k = K[i];
+  [k.ns, k.n, k.rd, k.s, k.rs, k.cpu, k.mem, fmt(k.age)].forEach((v, j) => r.cells[j].textContent !== '' + v && (r.cells[j].textContent = v));
+  r.classList.toggle('x', !!k.x);
+});
+let sel = 0, dir = 1, pause = 0, busy = false, frozen = false;
+async function churn(k) { // Terminating -> ContainerCreating -> Running with a new suffix
+  busy = k.x = 1; k.s = 'Terminating'; draw(); await sleep(2200);
+  k.n = k.n.replace(/-[^-]+$/, '-' + sfx()); k.rd = '0/1'; k.s = 'ContainerCreating'; k.cpu = k.mem = k.age = 0; draw(); await sleep(2600);
+  k.rd = '1/1'; k.s = 'Running'; k.rs++; k.x = busy = 0; draw();
 }
 function k9step() {
-  rows.forEach((r, i) => {
-    cell(r, 7, fmt(++age[i]));
-    if (!r.classList.contains('x')) { cell(r, 5, Math.max(1, +r.cells[5].textContent + rnd(-2, 2))); cell(r, 6, Math.max(8, +r.cells[6].textContent + rnd(-3, 3))); }
-  });
+  K.forEach(k => { k.age++; if (!k.x) { k.cpu = Math.max(1, k.cpu + rnd(-2, 2)); k.mem = Math.max(8, k.mem + rnd(-3, 3)); } });
   if (pause-- <= 0) {
     pause = rnd(2, 5); if (Math.random() < .2) pause += 6;
     rows[sel].classList.remove('sel'); sel += dir;
     if (sel < 0 || sel >= rows.length) { dir = -dir; sel += 2 * dir; }
     rows[sel].classList.add('sel');
   }
-  if (!busy && Math.random() < .03) churn(rnd(0, rows.length - 2));
+  if (!busy && Math.random() < .03) churn(K[rnd(0, K.length - 2)]);
+  draw();
 }
-if (!still) {
-  let kon = false;
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.target === k9) kon = e.isIntersecting; else pieces.find(p => p.el === e.target).on = e.isIntersecting;
-  }));
-  pieces.forEach(p => io.observe(p.el)); io.observe(k9);
-  requestAnimationFrame(loop);
-  setInterval(() => kon && !document.hidden && !playing && k9step(), 1000);
-}
-setInterval(() => $('.tm', live).textContent = hm(), 5000);
+let kon = false;
+const io = new IntersectionObserver(es => es.forEach(e => e.target === k9 ? kon = e.isIntersecting : pieces.find(p => p.el === e.target).on = e.isIntersecting));
+pieces.forEach(p => io.observe(p.el)); io.observe(k9);
+requestAnimationFrame(loop);
+setInterval(() => kon && !document.hidden && !playing && !frozen && k9step(), 1000);
+// live prompt: the clock colon blinks, the ░▒▓ block rotates its shades
+const rb = $('.pl', live).firstChild, SH = ['░▒▓', '▒▓░', '▓░▒'];
+let bl = 0, si = 0;
+setInterval(() => { const t = hm(); $('.tm', live).textContent = (bl ^= 1) ? t : t.replace(':', ' '); }, 500);
+setInterval(() => { if (!rb._g) rb.data = SH[++si % 3]; }, 900);
 
 // ---- intro: type each command, then print its output line by line ----
 async function play() {
@@ -249,10 +258,9 @@ async function play() {
   inp.value = typed.textContent = st.textContent = ''; inp.blur(); // drop input typed during replay
   $$('.h, .bg', term).forEach(e => e.remove());
   pieces.forEach(p => p.next = 0); // re-decode the banner on every (re)start
-  blocks().forEach(b => { b.hidden = !still; $$('.o', b).forEach(l => l.hidden = !still); $('.tm', b).textContent = hm(); });
+  blocks().forEach(b => { b.hidden = true; $$('.o', b).forEach(l => l.hidden = true); $('.tm', b).textContent = hm(); });
   $('.tm', live).textContent = hm();
-  live.hidden = !still;
-  if (still) { playing = false; return; }
+  live.hidden = true;
   for (const b of blocks()) {
     const t = $('.t', b), s = t.dataset.s ??= t.textContent;
     $('.tm', b).textContent = hm(); // a printed prompt keeps the time it was printed at
@@ -274,47 +282,82 @@ async function play() {
   live.hidden = false; typed.after(cur); toBottom(); playing = false;
 }
 
-// ---- monochrome glitches: rare and short ----
+// ---- monochrome glitches: decorative chrome only, never contacts / links / project names / whoami ----
+// every effect registers an undo; heal() runs them all before anything is cloned, originals live in JS closures
 const GL = '░▒▓█▀▄▌▐#%&@$/\\|<>{}[]?*+=~^';
 const rg = () => GL[rnd(0, GL.length - 1)];
 const textNodes = () => {
   const w = document.createTreeWalker(term, NodeFilter.SHOW_TEXT, { acceptNode: n =>
-    /\S/.test(n.data) && !n.parentElement.closest('[hidden], [data-a], table')  /* k9s reads its numbers back from the DOM */ ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    /\S/.test(n.data) && !n.parentElement.closest('[hidden], [data-a]') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
   const a = []; while (w.nextNode()) a.push(w.currentNode); return a;
 };
-// whole=true replaces a whole row with random glyphs, else a few characters
-async function scramble(whole) {
-  const ns = textNodes(), n = ns[rnd(0, ns.length - 1)];
+const R = new Set(), heal = () => R.forEach(u => u());
+async function burst(u, frames, ms = () => rnd(40, 80)) {
+  R.add(u);
+  for (const f of frames) { f(); await sleep(ms()); }
+  u(); R.delete(u);
+}
+const one = fn => { let b; return async () => { if (b) return; b = 1; await fn(); b = 0; }; };
+const vis = sel => $$(sel).filter(e => { const r = e.getBoundingClientRect(); return !e.closest('[hidden]') && r.width && r.bottom > 0 && r.top < innerHeight; });
+// corrupt one direct text node of a visible element matching sel (mk gives the corrupted text), then restore it
+async function txt(sel, mk) {
+  const el = pick(vis(sel)), n = el && pick([...el.childNodes].filter(c => c.nodeType === 3 && /\S/.test(c.data)));
   if (!n || n._g) return;
-  const s = n.data, i = rnd(0, s.length - 1);
-  let lo = i, hi = i + rnd(3, 9);
-  if (whole) { lo = s.lastIndexOf('\n', i) + 1; hi = s.indexOf('\n', i); if (hi < 0) hi = s.length; hi = Math.max(hi, lo); }
-  n._g = 1;
-  for (let k = rnd(1, 3); k--;) {
-    n.data = s.slice(0, lo) + s.slice(lo, hi).replace(/\S/g, rg) + s.slice(hi);
-    await sleep(rnd(40, 80));
-  }
-  n.data = s; n._g = 0;
+  n._g = 1; const s = n.data;
+  await burst(() => n.data = s, Array.from({ length: rnd(1, 3) }, () => () => n.data = mk(s)));
+  n._g = 0;
 }
-async function tear() { // shift a slice of rows sideways
-  const ls = $$('.o:not([data-a])', term).filter(l => !l.closest('[hidden]')), i = rnd(0, ls.length - 1);
-  const dx = rnd(4, 18) * (Math.random() < .5 ? -1 : 1), pick = ls.slice(i, i + rnd(1, 3));
-  pick.forEach((l, k) => l.style.transform = `translateX(${k % 2 ? -dx / 2 : dx}px)`);
-  await sleep(rnd(50, 120));
-  pick.forEach(l => l.style.transform = '');
-}
-async function jitter() {
-  for (let k = 0; k < 2; k++) { term.style.transform = `translate(${rnd(-2, 2)}px,${rnd(-1, 1)}px)`; await sleep(40); }
-  term.style.transform = '';
-}
-async function flicker() {
-  for (let k = 0; k < 3; k++) { cur.style.visibility = 'hidden'; await sleep(45); cur.style.visibility = ''; await sleep(45); }
-}
-const fx = [() => scramble(0), () => scramble(1), tear, jitter, flicker];
+const part = s => { const len = s.length > 20 ? rnd(8, 30) : rnd(2, 8), lo = rnd(0, s.length - 1); return s.slice(0, lo) + s.slice(lo, lo + len).replace(/\S/g, rg) + s.slice(lo + len); };
+const G = ['#tb span', '#sb kbd, #sb span:nth-child(n+3)', '.pl, .tm', '.bt > i, [data-gl]', '.bg', '.k9 .ki span, .k9 .ttl, .k9 th, .k9 td'];
+const scr = () => txt(pick(G), part);
+const shade = () => txt('.pl', () => pick(['▓▒░', '▒░▓', '░▓▒', '▓▓▓', '░░░']));
+const clock = () => txt('.tm', s => s.replace(/\d/g, () => rnd(0, 9)));
+const shift = () => { // tear a few neighbouring chrome pieces sideways
+  const a = vis(pick(['.pl i', '#tb span', '#sb span', '.bt > i'])), i = rnd(0, a.length - 1), els = a.slice(i, i + rnd(1, 3)), dx = rnd(4, 14) * (rnd(0, 1) || -1);
+  return burst(() => els.forEach(e => e.style.transform = ''), [() => els.forEach((e, k) => e.style.transform = `translateX(${k % 2 ? -dx / 2 : dx}px)`)], () => rnd(50, 120));
+};
+const frame = one(() => { // pane / k9s border: dash, flash, or a segment breaks and reappears a few px off
+  const k = pick([term, ...vis('.kb')]), s = k.style, r = k.getBoundingClientRect();
+  const edge = k === term && (r.top > 0 ? ['-1px', '0 4px'] : r.bottom < innerHeight && ['100%', '0 -4px']);
+  const gap = () => {
+    s.setProperty('--l', rnd(16, Math.max(17, r.width - 160)) + 'px'); s.setProperty('--w', rnd(30, 140) + 'px');
+    s.setProperty('--t', edge[0]); s.setProperty('--sh', edge[1] + ' #505050'); term.classList.add('br');
+  };
+  return burst(() => { s.borderStyle = s.borderColor = ''; ['--l', '--w', '--t', '--sh'].forEach(v => s.removeProperty(v)); term.classList.remove('br'); },
+    edge && rnd(0, 1) ? [gap, gap] : [() => s.borderStyle = 'dashed', () => { s.borderStyle = ''; s.borderColor = '#d0d0d0'; }, () => s.borderStyle = 'dotted']);
+});
+const ZT = term.dataset.z;
+const ztitle = one(() => burst(() => term.dataset.z = ZT, [0, 1, 2].map(() => () => term.dataset.z = ZT.replace(/./g, rg))));
+// zellij: the inverse "on" tab and the underline marker jump to other tabs and back
+const tabs = $$('#tb span:not(.z)'), act = $('#tb .on'), mk = $('#tb').appendChild(Object.assign(document.createElement('i'), { id: 'mk' }));
+const goTab = t => { tabs.forEach(x => x.classList.toggle('on', x === t)); mk.style.left = t.offsetLeft + 'px'; mk.style.width = t.offsetWidth + 'px'; };
+goTab(act); addEventListener('resize', () => goTab(act));
+const jump = one(() => { const o = tabs.filter(t => t !== act && t.offsetWidth); return burst(() => goTab(act), [pick(o), pick(o)].map(t => () => goTab(t)), () => rnd(70, 130)); });
+const mn = $('#sb .m').firstChild, LK = mn.data, kb = $$('#sb kbd'), sp = $$('#sb span')[1].firstChild, SP = sp.data;
+const stat = one(() => burst(() => { mn.data = LK; kb.forEach(k => k.classList.remove('iv')); }, [
+  () => mn.data = ' NORMAL ', () => mn.data = LK, () => { mn.data = ' NORMAL '; kb.forEach(k => k.classList.add('iv')); }, () => kb.forEach(k => k.classList.remove('iv'))], () => rnd(50, 110)));
+const spin = one(() => burst(() => sp.data = SP, Array.from({ length: rnd(8, 16) }, (_, i) => () => sp.data = ` ${'⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'[i % 10]} `), () => 80));
+const flash = one(() => st.textContent ? 0 : burst(() => { if (st.textContent === '✖ ') st.textContent = ''; }, [() => st.textContent = '✖ '], () => rnd(80, 160)));
+const flicker = one(() => burst(() => cur.style.visibility = '', [1, 0, 1, 0].map(h => () => cur.style.visibility = h ? 'hidden' : ''), () => 45));
+const stutter = one(() => burst(() => cur.style.transform = '', [`${rnd(2, 5)}ch`, `-${rnd(1, 2)}ch`, `${rnd(1, 3)}ch`].map(x => () => cur.style.transform = `translateX(${x})`), () => rnd(60, 110)));
+const jitter = one(() => burst(() => term.style.transform = '', [0, 1].map(() => () => term.style.transform = `translate(${rnd(-2, 2)}px,${rnd(-1, 1)}px)`), () => 40));
+const redraw = one(() => { // lines repaint top to bottom like a terminal redraw (dimmed, never hidden)
+  const ls = vis('.blk .cmd, .blk .o, #live').slice(0, 24);
+  return burst(() => ls.forEach(l => l.style.opacity = ''), ls.map((l, i) => () => { l.style.opacity = .35; if (ls[i - 3]) ls[i - 3].style.opacity = ''; }), () => 20);
+});
+const lag = one(async () => { frozen = true; await sleep(rnd(1500, 2500)); frozen = false; k9step(); k9step(); }); // k9s hangs, then catches up
+const fx = [scr, scr, scr, shift, shift, frame, frame, ztitle, jump, stat, spin, shade, clock, flash, flicker, stutter, jitter, redraw, lag];
 async function glitch() {
-  await fx[rnd(0, fx.length - 1)]();
-  if (Math.random() < .3) { await sleep(rnd(80, 200)); if (!playing) await fx[rnd(0, fx.length - 1)](); }
+  const a = pick(fx)();
+  if (Math.random() < .3) { await sleep(rnd(30, 150)); if (!playing) pick(fx)(); }
+  await a;
 }
+// whole screen, rare: a light scanline sweeps down, or one frame of vertical jitter
+const band = document.body.appendChild(document.createElement('div'));
+band.style.cssText = 'position:fixed;left:0;right:0;top:0;background:#d0d0d0;opacity:0;pointer-events:none;z-index:9';
+const scan = () => { band.style.height = rnd(2, 6) + 'px'; return band.animate([{ transform: 'translateY(-8px)', opacity: .25 }, { transform: `translateY(${innerHeight}px)`, opacity: .25 }], rnd(350, 700)).finished; };
+const screen = [term, $('#tb'), $('#sb')];
+const vjit = () => burst(() => screen.forEach(e => e.style.translate = ''), [0, 1].map(() => () => screen.forEach(e => e.style.translate = `0 ${rnd(-4, 4)}px`)), () => 40);
 
 // ---- fake background activity above the prompt: one short line, removed after a few seconds ----
 const t0 = Date.now(), STARS = 'vega sirius altair mira capella deneb rigel'.split(' ');
@@ -371,7 +414,7 @@ const add = x => { // append one line (or a cloned output) to the history, cappe
 };
 const prompt = cmd => { // the typed prompt as printed: ribbon (time now) + status + command
   const d = document.createElement('div'), l = document.createElement('div'), b = document.createElement('b');
-  b.textContent = st.textContent + '❯'; l.append(b, ' ' + cmd); d.append($('.pl', live).cloneNode(true), l); return d;
+  b.textContent = st.textContent + '❯'; l.append(b, ' ' + cmd); const p = $('.pl', live).cloneNode(true); p.firstChild.data = '░▒▓'; $('.tm', p).textContent = hm(); d.append(p, l); return d;
 };
 const show = id => { // reuse the static output instead of duplicating text
   const c = $(`[data-o=${id}]`).cloneNode(true);
@@ -380,6 +423,7 @@ const show = id => { // reuse the static output instead of duplicating text
 };
 async function exec(line) {
   const [c, ...a] = line.trim().split(/\s+/);
+  heal(); // no half-glitched text may be cloned into the history
   add(prompt(line));
   if (!c) return;
   let code = 0;
@@ -407,7 +451,6 @@ async function exec(line) {
   else if (c === 'clear') { blocks().forEach(b => b.hidden = true); $$('.h', term).forEach(e => e.remove()); }
   else if (c === 'exit') {
     add('logout');
-    if (still) return play();
     playing = true; await sleep(800); // let any running glitch restore its text before we snapshot it
     const ns = textNodes(), orig = ns.map(n => n.data);
     for (let k = 1; k <= 6; k++) { // growing corruption, then a black beat, then the session restarts
@@ -422,8 +465,7 @@ async function exec(line) {
   st.textContent = code ? `✖ ${code} ` : ''; // starship $status on the next prompt
 }
 
-if (still) play();
-else { play(); every(glitch, 3500, 8000); every(bg, 12000, 25000); }
+play(); every(glitch, 1500, 3800); every(bg, 12000, 25000); every(scan, 20000, 40000); every(vjit, 20000, 40000);
 })();
 </script>
 </body>
