@@ -86,6 +86,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
   .bt .g { width: 3ch; }
   #tb, #sb { font-size: 12px; }
 }
+@media (max-width: 400px) { #tb span:nth-child(n+4) { display: none; } }
 </style>
 </head>
 <body>
@@ -132,7 +133,7 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 <tr data-s="864000"><td class="nw">argocd<td>argocd-server-q9w2z<td>1/1<td>Running<td class="nw">0<td>11<td class="nw">96<td>10d
 <tr data-s="2592000"><td class="nw">cert-manager<td>cert-manager-m4t8r<td>1/1<td>Running<td class="nw">1<td>2<td class="nw">31<td>30d
 <tr data-s="432000"><td class="nw">ingress-nginx<td>ingress-nginx-controller-k7x9d<td>1/1<td>Running<td class="nw">0<td>14<td class="nw">88<td>5d
-<tr data-s="86400"><td class="nw">plai<td>plai-storefront-v3n6c<td>1/1<td>Running<td class="nw">0<td>27<td class="nw">142<td>1d
+<tr data-s="90000"><td class="nw">plai<td>plai-storefront-v3n6c<td>1/1<td>Running<td class="nw">0<td>27<td class="nw">142<td>25h
 <tr data-s="7200"><td class="nw">monitoring<td>vmagent-h8j2s<td>1/1<td>Running<td class="nw">2<td>9<td class="nw">57<td>2h
 <tr data-s="1296000"><td class="nw">rabbitmq<td>rabbitmq-0<td>1/1<td>Running<td class="nw">0<td>18<td class="nw">231<td>15d
 </table>
@@ -278,7 +279,7 @@ const GL = '░▒▓█▀▄▌▐#%&@$/\\|<>{}[]?*+=~^';
 const rg = () => GL[rnd(0, GL.length - 1)];
 const textNodes = () => {
   const w = document.createTreeWalker(term, NodeFilter.SHOW_TEXT, { acceptNode: n =>
-    /\S/.test(n.data) && !n.parentElement.closest('[hidden], [data-a]') ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    /\S/.test(n.data) && !n.parentElement.closest('[hidden], [data-a], table')  /* k9s reads its numbers back from the DOM */ ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
   const a = []; while (w.nextNode()) a.push(w.currentNode); return a;
 };
 // whole=true replaces a whole row with random glyphs, else a few characters
@@ -352,7 +353,7 @@ inp.id = 'in'; inp.autocomplete = 'off'; inp.spellcheck = false;
 inp.setAttribute('aria-label', 'terminal input'); inp.setAttribute('autocapitalize', 'off'); inp.setAttribute('autocorrect', 'off');
 document.body.append(inp);
 const focus = () => inp.focus({ preventScroll: true });
-inp.oninput = () => typed.textContent = inp.value;
+inp.oninput = () => { typed.textContent = inp.value; toBottom(); };
 inp.onkeydown = e => {
   if (e.key !== 'Enter' || playing) return;
   const v = inp.value; inp.value = typed.textContent = ''; exec(v);
