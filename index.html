@@ -12,41 +12,88 @@
 <meta property="og:description" content="Bohdan Sukhomlinov (shellshock / dnull): DevOps, Platform Engineer, SRE. Lviv, Ukraine.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16'/%3E%3Cpath d='M3 4l4 4-4 4M8 12h5' stroke='%23d0d0d0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E">
 <style>
-/* greys only: #000 bg, #d0d0d0 text, #fff emphasis, #707070 dim */
+/* greys only: #000 bg, #d0d0d0 text, #fff emphasis, #707070 dim; no hue anywhere */
 :root { color-scheme: dark; }
 [hidden] { display: none !important; }
 html { background: #000; }
 body {
-  margin: 0; padding: 18px 12px 48px; background: #000; color: #d0d0d0;
-  font: clamp(15px, 1.1vw + 10px, 22px)/1.45 ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
+  margin: 0; padding: 38px 6px; background: #000; color: #d0d0d0;
+  font: clamp(15px, 1.1vw + 10px, 22px)/1.45 "Iosevka Term", "Iosevka Nerd Font", "Iosevka", ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace;
 }
-#term { max-width: 80ch; margin: 0 auto; overflow-x: clip; }
+/* zellij: tab bar + status bar, one rounded pane */
+#tb, #sb { position: fixed; left: 0; right: 0; height: 24px; line-height: 24px; display: flex; overflow: hidden; white-space: pre; background: #1a1a1a; color: #a0a0a0; font-size: 14px; z-index: 5; }
+#tb { top: 0; } #sb { bottom: 0; }
+#tb span, #sb span { margin-right: 1px; }
+#tb .z { background: #3a3a3a; color: #fff; font-weight: bold; }
+#tb span:not(.z) { background: #2a2a2a; }
+#tb .on { background: #d0d0d0 !important; color: #000; font-weight: bold; }
+#sb .m { background: #505050; color: #fff; font-weight: bold; }
+#sb kbd { font: inherit; background: #3a3a3a; color: #fff; }
+#term { position: relative; border: 1px solid #505050; border-radius: 8px; padding: 1em 1.3ch .6em; overflow-x: clip; }
+#term::before { content: " zsh "; position: absolute; top: -.75em; left: 1.5ch; background: #000; color: #d0d0d0; font-size: .8em; line-height: 1.5; }
 .o, .cmd { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.45em; }
 b { color: #fff; font-weight: bold; }
 .d, .bg { color: #707070; }
 a { color: inherit; text-decoration: underline; }
 a:hover, a:focus-visible { background: #d0d0d0; color: #000; outline: 0; }
 ::selection { background: #d0d0d0; color: #000; }
-.ps, .t { color: #fff; }
+.t { color: #fff; }
 .blk { margin-bottom: 1.45em; }
 pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 /* 43 columns must fit the viewport */
-#bn { font-size: min(26px, calc((100vw - 32px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
-#dn { line-height: 1.2; }
-.cur {
-  display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0;
-  vertical-align: text-bottom; animation: bl 1.06s steps(1) infinite;
-}
-@keyframes bl { 50% { opacity: 0; } }
+#bn { font-size: min(26px, calc((100vw - 44px) / 43 / .6)); line-height: 1; color: #fff; padding: .2em 0; }
+/* starship: powerline ribbon, triangles by clip-path (no Nerd Font glyphs) */
+.pl { display: flex; white-space: nowrap; line-height: 1.45; }
+.pl i { font-style: normal; position: relative; padding: 0 1ch 0 1.4ch; }
+.pl i:first-of-type { padding-left: 1ch; }
+.pl i::after { content: ""; position: absolute; left: 100%; top: 0; bottom: 0; width: .8em; background: inherit; clip-path: polygon(0 0, 100% 50%, 0 100%); z-index: 1; }
+.pl .s1 { background: #d0d0d0; color: #000; font-weight: bold; }
+.pl .s2 { background: #a0a0a0; color: #000; }
+.pl .s3 { background: #707070; color: #000; }
+.pl .s4 { background: #505050; color: #fff; }
+.pl .s5 { background: #2a2a2a; color: #d0d0d0; margin-right: .8em; }
+.cur { display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0; vertical-align: text-bottom; }
 #in { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; font-size: 16px; }
-@media (prefers-reduced-motion: reduce) { .cur { animation: none; } }
+/* eza grid */
+.eza { columns: 20ch auto; }
+.eza b { display: block; }
+/* bat */
+.bt { display: flex; line-height: 1.17; min-height: 0; } /* box-drawing glyphs only join at ~font height */
+.bt .g { flex: none; width: 7ch; text-align: center; overflow: hidden; color: #707070; font-style: normal; }
+.bt i { font-style: normal; color: #505050; }
+.bt .ln { flex: 1; overflow: hidden; }
+.bt .g, .bt .ln { white-space: nowrap; }
+.bt .bd { flex: 1; min-width: 0; padding-left: 1ch; }
+/* k9s */
+.k9 { white-space: normal; font-size: .8em; max-width: 112ch; }
+.k9 .ki { padding-bottom: .6em; }
+.k9 .kb { position: relative; border: 1px solid #505050; padding: .8em 1ch .4em; }
+.k9 .ttl { position: absolute; top: -.75em; left: 50%; transform: translateX(-50%); background: #000; padding: 0 1ch; color: #fff; }
+.k9 table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.k9 th, .k9 td { padding: 0; text-align: left; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.k9 th { color: #707070; }
+.k9 col:nth-child(1) { width: 14ch; } .k9 col:nth-child(3) { width: 6ch; } .k9 col:nth-child(4) { width: 18ch; } .k9 col:nth-child(5) { width: 9ch; }
+.k9 col:nth-child(6) { width: 5ch; } .k9 col:nth-child(7) { width: 5ch; } .k9 col:nth-child(8) { width: 5ch; }
+.k9 tr.x { color: #707070; }
+.k9 tr.sel { background: #d0d0d0; color: #000; }
+@media (max-width: 860px) {
+  .k9 .nw, .k9 col:nth-child(1), .k9 col:nth-child(5), .k9 col:nth-child(7) { display: none; }
+  .k9 col:nth-child(4) { width: 12ch; }
+}
+@media (max-width: 520px) {
+  .pl .s3, .pl .s4 { display: none; }
+  .bt { font-size: .9em; }
+  .bt .g { width: 3ch; }
+  #tb, #sb { font-size: 12px; }
+}
 </style>
 </head>
 <body>
+<header id="tb" aria-hidden="true"><span class="z"> Zellij (dnull) </span><span> 1 editor </span><span class="on"> 2 shell </span><span> 3 k9s </span><span> 4 etc </span></header>
 <main id="term">
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">figlet dnull</span></div>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">figlet dnull</span></div></div>
 <div class="out">
 <pre class="o" id="bn" data-a="bn" role="img" aria-label="dnull">██████╗ ███╗   ██╗██╗   ██╗██╗     ██╗     
 ██╔══██╗████╗  ██║██║   ██║██║     ██║     
@@ -58,95 +105,86 @@ pre.o { margin: 0; white-space: pre; overflow: hidden; font-family: inherit; }
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">whoami</span></div>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">whoami</span></div></div>
 <div class="out">
 <div class="o"><b>devops / platform / sre</b> - lviv, ua - 11y uptime</div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">ls ~/projects</span></div>
-<div class="out">
-<div class="o">open-procurement  logistics-platform  defense-support  kyiv-crisis-infra  homelab  appelsin</div>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">ls ~/projects</span></div></div>
+<div class="out" data-o="ls">
+<div class="o eza"><b>open-procurement</b><b>logistics-platform</b><b>defense-support</b><b>kyiv-crisis-infra</b><b>homelab</b><b>appelsin</b></div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">./donut</span></div>
-<div class="out">
-<pre class="o" id="dn" data-a="dn" aria-hidden="true">+- ./donut --------------------------+
-|                                    |
-|            ########$               |
-|          !=!!!!!!****###*          |
-|         :;====;=!!!!!!!!**         |
-|        ~~~~~~::::;;===!=!!!=       |
-|        -.    .,,,-~~:;;;;===;      |
-|                   .,--~~:::;;      |
-|               .=*    ..,--~~:      |
-|             ..~=;:~     .,,-       |
-|                ~::~.               |
-|                                    |
-|                                    |
-|                                    |
-|                                    |
-+------------------------------------+</pre>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">kk</span></div></div>
+<div class="out" data-o="k9">
+<div class="o k9" id="k9">
+<div class="ki"><span class="d">Context:</span> libra <span class="nw">&nbsp;<span class="d">Cluster:</span> libra </span>&nbsp;<span class="d">K9s Rev:</span> v0.32</div>
+<div class="kb"><span class="ttl"> Pods(all)[7] </span>
+<table>
+<colgroup><col><col><col><col><col><col><col><col></colgroup>
+<thead><tr><th class="nw">NAMESPACE<th>NAME<th>READY<th>STATUS<th class="nw">RESTARTS<th>CPU<th class="nw">MEM<th>AGE
+<tbody>
+<tr class="sel" data-s="172800"><td class="nw">dnull-web<td>dnull-web-x2k4p<td>1/1<td>Running<td class="nw">0<td>3<td class="nw">24<td>2d
+<tr data-s="864000"><td class="nw">argocd<td>argocd-server-q9w2z<td>1/1<td>Running<td class="nw">0<td>11<td class="nw">96<td>10d
+<tr data-s="2592000"><td class="nw">cert-manager<td>cert-manager-m4t8r<td>1/1<td>Running<td class="nw">1<td>2<td class="nw">31<td>30d
+<tr data-s="432000"><td class="nw">ingress-nginx<td>ingress-nginx-controller-k7x9d<td>1/1<td>Running<td class="nw">0<td>14<td class="nw">88<td>5d
+<tr data-s="86400"><td class="nw">plai<td>plai-storefront-v3n6c<td>1/1<td>Running<td class="nw">0<td>27<td class="nw">142<td>1d
+<tr data-s="7200"><td class="nw">monitoring<td>vmagent-h8j2s<td>1/1<td>Running<td class="nw">2<td>9<td class="nw">57<td>2h
+<tr data-s="1296000"><td class="nw">rabbitmq<td>rabbitmq-0<td>1/1<td>Running<td class="nw">0<td>18<td class="nw">231<td>15d
+</table>
+</div>
+</div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">cat ~/.contacts</span></div>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">bat ~/.contacts</span></div></div>
 <div class="out" data-o="contacts">
-<div class="o">github    <a href="https://github.com/shellshock1953">shellshock1953</a>
-linkedin  <a href="https://www.linkedin.com/in/shellshock-dnull/">shellshock-dnull</a>
-email     <a href="mailto:shellshock.dnull@gmail.com">shellshock.dnull@gmail.com</a></div>
+<div class="o bt"><i class="g">───────</i><i>┬</i><i class="ln">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</i></div>
+<div class="o bt"><i class="g"></i><i>│</i><span class="bd">File: <b>.contacts</b></span></div>
+<div class="o bt"><i class="g">───────</i><i>┼</i><i class="ln">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</i></div>
+<div class="o bt"><i class="g">1</i><i>│</i><span class="bd">github    <a href="https://github.com/shellshock1953">shellshock1953</a></span></div>
+<div class="o bt"><i class="g">2</i><i>│</i><span class="bd">linkedin  <a href="https://www.linkedin.com/in/shellshock-dnull/">shellshock-dnull</a></span></div>
+<div class="o bt"><i class="g">3</i><i>│</i><span class="bd">email     <a href="mailto:shellshock.dnull@gmail.com">shellshock.dnull@gmail.com</a></span></div>
+<div class="o bt"><i class="g">───────</i><i>┴</i><i class="ln">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</i></div>
 </div>
 </section>
 
 <section class="blk">
-<div class="cmd"><span class="ps">shellshock@dnull:~$</span> <span class="t">xdg-open cv.dnull.systems</span></div>
+<div class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b>❯</b> <span class="t">xdg-open https://cv.dnull.systems</span></div></div>
 <div class="out" data-o="cv">
 <div class="o">-&gt; <a href="https://cv.dnull.systems">full cv</a></div>
 </div>
 </section>
 
 <div id="feed"></div>
-<div id="live" class="cmd"><span class="ps">shellshock@dnull:~$</span> <span id="typed" class="t"></span><span class="cur"></span></div>
+<div id="live" class="cmd"><div class="pl">░▒▓<i class="s1">dnull</i><i class="s2">~</i><i class="s3">main</i><i class="s4">☸ libra</i><i class="s5 tm">09:41</i></div><div><b id="st"></b><b>❯</b> <span id="typed" class="t"></span><span class="cur"></span></div></div>
 
 </main>
+<footer id="sb" aria-hidden="true"><span class="m"> LOCKED </span><span> </span><span><kbd> Ctrl a </kbd> UNLOCK </span><span><kbd> Ctrl q </kbd> QUIT </span></footer>
 <script>
 (() => {
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[rnd(0, a.length - 1)];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const term = $('#term'), live = $('#live'), typed = $('#typed'), feed = $('#feed'), cur = $('.cur');
-const PS = $('.ps').textContent;
+const term = $('#term'), live = $('#live'), typed = $('#typed'), feed = $('#feed'), cur = $('.cur'), st = $('#st');
 const blocks = () => $$('.blk');
 const toBottom = () => scrollTo(0, 1e9);
 const atBottom = () => innerHeight + scrollY >= document.documentElement.scrollHeight - 40;
+const hm = () => new Date().toTimeString().slice(0, 5);
+const sfx = () => Math.random().toString(36).slice(2, 7);
 let playing = false, skip = false;
 
-// ---- animated ASCII: one rAF loop (<=20 fps) drives each <pre data-a> only while it is on screen ----
+// ---- banner animation: one rAF loop (<=20 fps) only while the <pre> is on screen ----
 const GB = '░▒▓#%&@$01/\\|';
 const grid = $('#bn').textContent.split('\n');
 const W = grid[0].length;
-// <donut>
-const donut = (A, B, w, h) => {
-  const o = Array(w * h).fill(' '), z = Array(w * h).fill(0);
-  const cA = Math.cos(A), sA = Math.sin(A), cB = Math.cos(B), sB = Math.sin(B);
-  for (let th = 0; th < 6.28; th += .07) {
-    const ct = Math.cos(th), st = Math.sin(th);
-    for (let ph = 0; ph < 6.28; ph += .03) {
-      const cp = Math.cos(ph), sp = Math.sin(ph), cx = ct + 2, D = 1 / (sp * cx * sA + st * cA + 5), t = sp * cx * cA - st * sA;
-      const x = (w / 2 + w * .42 * D * (cp * cx * cB - t * sB)) | 0, y = (h / 2 + h * .55 * D * (cp * cx * sB + t * cB)) | 0, i = x + w * y;
-      const L = (st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB;
-      if (y >= 0 && y < h && x >= 0 && x < w && D > z[i]) { z[i] = D; o[i] = ' .,-~:;=!*#$@'[L > 0 ? (L * 8) | 0 : 0]; }
-    }
-  }
-  const row = y => o.slice(y * w, y * w + w).join(''), bar = '-'.repeat(w - 9);
-  return [`+- ./donut ${bar.slice(0, -1)}+`.slice(0, w + 2), ...Array.from({ length: h }, (_, y) => '|' + row(y) + '|'), '+' + '-'.repeat(w) + '+'].join('\n');
-};
-// </donut>
 const AN = {
   bn(t, o) { // decode / slice tear at random, a column scanline sweeps all the time
     if (t > (o.next ??= 0)) {
@@ -160,7 +198,6 @@ const AN = {
       return s;
     }).join('\n');
   },
-  dn: t => donut(t / 700, t / 1400, 36, 14),
 };
 const pieces = $$('[data-a]').map(el => ({ el, f: AN[el.dataset.a], on: false, last: '' }));
 let tick = 0;
@@ -170,23 +207,54 @@ function loop(t) {
   tick = t;
   for (const p of pieces) if (p.on) { const s = p.f(t, p); if (s !== p.last) p.el.textContent = p.last = s; }
 }
-if (!still) {
-  const io = new IntersectionObserver(es => es.forEach(e => { const p = pieces.find(p => p.el === e.target); p.on = e.isIntersecting; }));
-  pieces.forEach(p => io.observe(p.el));
-  requestAnimationFrame(loop);
+
+// ---- k9s panel: numbers drift, selection browses, a pod now and then restarts ----
+const k9 = $('#k9'), rows = $$('tbody tr', k9);
+const age = rows.map(r => +r.dataset.s), cell = (r, i, v) => r.cells[i].textContent = v;
+const fmt = s => s < 120 ? s + 's' : s < 7200 ? (s / 60 | 0) + 'm' : s < 172800 ? (s / 3600 | 0) + 'h' : (s / 86400 | 0) + 'd';
+let sel = 0, dir = 1, pause = 0, busy = false;
+async function churn(i) { // Terminating -> ContainerCreating -> Running with a new suffix
+  const r = rows[i]; busy = true; r.classList.add('x'); cell(r, 3, 'Terminating'); await sleep(2200);
+  cell(r, 1, r.cells[1].textContent.replace(/-[^-]+$/, '-' + sfx())); cell(r, 2, '0/1'); cell(r, 3, 'ContainerCreating'); cell(r, 5, 0); cell(r, 6, 0); age[i] = 0;
+  await sleep(2600); cell(r, 2, '1/1'); cell(r, 3, 'Running'); cell(r, 4, +r.cells[4].textContent + 1); r.classList.remove('x'); busy = false;
 }
+function k9step() {
+  rows.forEach((r, i) => {
+    cell(r, 7, fmt(++age[i]));
+    if (!r.classList.contains('x')) { cell(r, 5, Math.max(1, +r.cells[5].textContent + rnd(-2, 2))); cell(r, 6, Math.max(8, +r.cells[6].textContent + rnd(-3, 3))); }
+  });
+  if (pause-- <= 0) {
+    pause = rnd(2, 5); if (Math.random() < .2) pause += 6;
+    rows[sel].classList.remove('sel'); sel += dir;
+    if (sel < 0 || sel >= rows.length) { dir = -dir; sel += 2 * dir; }
+    rows[sel].classList.add('sel');
+  }
+  if (!busy && Math.random() < .03) churn(rnd(0, rows.length - 2));
+}
+if (!still) {
+  let kon = false;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.target === k9) kon = e.isIntersecting; else pieces.find(p => p.el === e.target).on = e.isIntersecting;
+  }));
+  pieces.forEach(p => io.observe(p.el)); io.observe(k9);
+  requestAnimationFrame(loop);
+  setInterval(() => kon && !document.hidden && !playing && k9step(), 1000);
+}
+setInterval(() => $('.tm', live).textContent = hm(), 5000);
 
 // ---- intro: type each command, then print its output line by line ----
 async function play() {
   playing = true; skip = false;
-  inp.value = typed.textContent = ''; inp.blur(); // drop input typed during replay
+  inp.value = typed.textContent = st.textContent = ''; inp.blur(); // drop input typed during replay
   $$('.h, .bg', term).forEach(e => e.remove());
   pieces.forEach(p => p.next = 0); // re-decode the banner on every (re)start
-  blocks().forEach(b => { b.hidden = !still; $$('.o', b).forEach(l => l.hidden = !still); });
+  blocks().forEach(b => { b.hidden = !still; $$('.o', b).forEach(l => l.hidden = !still); $('.tm', b).textContent = hm(); });
+  $('.tm', live).textContent = hm();
   live.hidden = !still;
   if (still) { playing = false; return; }
   for (const b of blocks()) {
     const t = $('.t', b), s = t.dataset.s ??= t.textContent;
+    $('.tm', b).textContent = hm(); // a printed prompt keeps the time it was printed at
     b.hidden = false; $('.out', b).hidden = true; t.textContent = '';
     t.after(cur);
     for (const ch of s) {
@@ -248,8 +316,7 @@ async function glitch() {
 }
 
 // ---- fake background activity above the prompt: one short line, removed after a few seconds ----
-const t0 = Date.now(), up = () => (4821 + (Date.now() - t0) / 1000).toFixed(3).padStart(9);
-const hms = () => new Date().toTimeString().slice(0, 8);
+const t0 = Date.now(), STARS = 'vega sirius altair mira capella deneb rigel'.split(' ');
 let pct = 0;
 const pull = () => { // docker-pull style progress bar
   pct = pct >= 100 ? 0 : Math.min(100, pct + rnd(4, 13));
@@ -258,16 +325,17 @@ const pull = () => { // docker-pull style progress bar
 };
 // [line, ms]: with ms the line is re-rendered every ms
 const life = [
-  [() => `[${up()}] hrtimer: interrupt took ${rnd(2e6, 9e6)} ns`],
-  [() => `${new Date().toDateString().slice(4, 10)} ${hms()} CRON[${rnd(1000, 9999)}]: (root) CMD (backup.sh)`],
-  [() => 'Connection to 10.0.0.1 closed.'],
+  [() => `Connection to ${pick(STARS)} closed.`],
+  [() => `[${pick(STARS)}] CRON[${rnd(1000, 9999)}]: (root) CMD (restic backup)`],
+  [() => `kubectx: switched to context "${pick(['ara', 'libra', 'lynx'])}"`],
+  [() => `stern: + dnull-web-${sfx()} › web`],
+  [() => 'Pane #2 exited with code 0'],
   [() => `up 11 years, load average: ${[0, 0, 0].map(() => (Math.random() * .8).toFixed(2)).join(', ')}`, 700],
-  [() => `CPU[${'|'.repeat(rnd(2, 20)).padEnd(24)}${(rnd(20, 99) / 10).toFixed(1)}%]`, 700],
   [pull, 180],
 ];
 async function bg() {
   if (feed.children.length) return;
-  const [f, ms] = life[rnd(0, life.length - 1)], stick = atBottom();
+  const [f, ms] = pick(life), stick = atBottom();
   const d = Object.assign(document.createElement('div'), { className: 'o bg', textContent: f() });
   feed.append(d); if (stick) toBottom();
   for (let k = ms ? Math.ceil(4000 / ms) : 1; k--;) {
@@ -298,25 +366,43 @@ document.addEventListener('click', e => {
 const add = x => { // append one line (or a cloned output) to the history, capped
   const d = typeof x === 'string' ? Object.assign(document.createElement('div'), { className: 'o', textContent: x }) : x;
   d.classList.add('h'); feed.before(d); toBottom();
-  $$('.h', term).slice(0, -40).forEach(e => e.remove());
+  $$('.h', term).slice(0, -60).forEach(e => e.remove());
+};
+const prompt = cmd => { // the typed prompt as printed: ribbon (time now) + status + command
+  const d = document.createElement('div'), l = document.createElement('div'), b = document.createElement('b');
+  b.textContent = st.textContent + '❯'; l.append(b, ' ' + cmd); d.append($('.pl', live).cloneNode(true), l); return d;
 };
 const show = id => { // reuse the static output instead of duplicating text
   const c = $(`[data-o=${id}]`).cloneNode(true);
-  c.removeAttribute('data-o'); c.hidden = false; $$('[style]', c).forEach(e => e.removeAttribute('style')); $$('[hidden]', c).forEach(l => l.hidden = false); add(c);
+  c.removeAttribute('data-o'); c.hidden = false; $$('[id]', c).forEach(e => e.removeAttribute('id'));
+  $$('[style]', c).forEach(e => e.removeAttribute('style')); $$('[hidden]', c).forEach(l => l.hidden = false); add(c);
 };
 async function exec(line) {
   const [c, ...a] = line.trim().split(/\s+/);
-  add(`${PS} ${line}`);
+  add(prompt(line));
   if (!c) return;
-  if (c === 'help') add('commands: help ls cat cv contact whoami clear exit');
+  let code = 0;
+  const err = (m, n = 1) => { add(m); code = n; };
+  if (c === 'help') add('commands: help ls ll cat bat cv contact whoami kk k gst v ssh z clear exit');
   else if (c === 'whoami') add('shellshock');
-  else if (c === 'ls') add(a.includes('-a') ? '.  ..  .contacts  projects' : 'projects');
+  else if (/^(ls|ll|la|eza)$/.test(c)) {
+    const p = a.find(x => x[0] !== '-');
+    if (!p) add(c === 'll' ? 'drwxr-xr-x - shellshock  1 Jan  2015 projects' : c === 'la' || a.includes('-a') ? '.contacts  projects' : 'projects');
+    else if (/projects$/.test(p)) show('ls');
+    else err(`${c}: ${p}: No such file or directory (os error 2)`);
+  }
   else if (c === 'cv') show('cv');
   else if (c === 'contact') show('contacts');
-  else if (c === 'cat') a.forEach(f => {
+  else if (c === 'cat' || c === 'bat') a.forEach(f => {
     f = f.replace(/^~\//, '');
-    if (f === '.contacts') show('contacts'); else add(`cat: ${f}: ${f === 'projects' ? 'Is a directory' : 'No such file or directory'}`);
+    if (f === '.contacts') show('contacts'); else err(`${c}: ${f}: ${f === 'projects' ? 'Is a directory' : 'No such file or directory'}`);
   });
+  else if (c === 'kk' || c === 'k9s') show('k9');
+  else if (c === 'k' || c === 'kubectl') err('error: You must be logged in to the server (Unauthorized)');
+  else if (c === 'gst') add('## main...origin/main');
+  else if (/^(v|vim|nvim)$/.test(c)) add("nvim: you're already home");
+  else if (c === 'ssh') err(a[0] ? `shellshock@${a[0].replace(/^.*@/, '')}: Permission denied (publickey).` : 'usage: ssh <star>', 255);
+  else if (c === 'z') err('zoxide: no match found');
   else if (c === 'clear') { blocks().forEach(b => b.hidden = true); $$('.h', term).forEach(e => e.remove()); }
   else if (c === 'exit') {
     add('logout');
@@ -329,9 +415,10 @@ async function exec(line) {
     }
     term.style.transform = ''; term.style.visibility = 'hidden'; await sleep(350);
     ns.forEach((n, i) => n.data = orig[i]); term.style.visibility = '';
-    play();
+    return play();
   }
-  else add(`bash: ${c}: command not found`);
+  else err(`zsh: command not found: ${c}`, 127);
+  st.textContent = code ? `✖ ${code} ` : ''; // starship $status on the next prompt
 }
 
 if (still) play();

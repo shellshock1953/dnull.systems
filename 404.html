@@ -6,15 +6,13 @@
 <title>dnull</title>
 <style>
 :root { color-scheme: dark; }
-body { margin: 0; padding: 14px 12px; background: #000; color: #d0d0d0; font: clamp(15px, 1.1vw + 10px, 22px)/1.45 ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+body { margin: 0; padding: 14px 12px; background: #000; color: #d0d0d0; font: clamp(15px, 1.1vw + 10px, 22px)/1.45 "Iosevka Term", "Iosevka Nerd Font", "Iosevka", ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
 a { color: inherit; }
 ::selection { background: #d0d0d0; color: #000; }
-.cur { display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0; vertical-align: text-bottom; animation: bl 1.06s steps(1) infinite; }
-@keyframes bl { 50% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .cur { animation: none; } }
+.cur { display: inline-block; width: .6em; height: 1.15em; background: #d0d0d0; vertical-align: text-bottom; }
 </style>
 </head>
-<body>shellshock@dnull:~$ cd <span id="p">/</span>
-bash: <span id="q">/</span>: No such file or directory
-<a href="/">shellshock@dnull:~$</a> <span class="cur"></span><script>document.getElementById('p').textContent = document.getElementById('q').textContent = location.pathname;</script></body>
+<body>❯ cd <span id="p">/</span>
+zsh: no such file or directory: <span id="q">/</span>
+<a href="/">✖ 1 ❯</a> <span class="cur"></span><script>document.getElementById('p').textContent = document.getElementById('q').textContent = location.pathname;</script></body>
 </html>
